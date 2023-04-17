@@ -55,7 +55,7 @@ function Users() {
                 }}
             >
                 <h1>Users</h1>
-                <Link to="/users/new" className="btn btn-primary">
+                <Link to="/users/new" className="btn-add">
                     Add New
                 </Link>
             </div>
@@ -89,15 +89,15 @@ function Users() {
                                     <td>{u.created_at}</td>
                                     <td>
                                         <Link
-                                            className="btn btn-success"
-                                            to={`/users/${u.id}/edit`}
+                                            className="btn-edit"
+                                            to={`/users/${u.id}`}
                                         >
                                             Edit
                                         </Link>
                                         &nbsp;
                                         <button
                                             onClick={(ev) => onDelete(u)}
-                                            className="btn btn-danger"
+                                            className="btn-delete"
                                         >
                                             Delete
                                         </button>
@@ -110,7 +110,7 @@ function Users() {
                 <div className="pagination">
                     {currentPage > 1 && (
                         <button
-                            className="btn btn-outline-secondary mr-2"
+                            className="btn-add"
                             onClick={handlePrevClick}
                         >
                             Previous
@@ -122,8 +122,8 @@ function Users() {
                                 key={page}
                                 className={`btn ${
                                     currentPage === page
-                                        ? "btn-primary"
-                                        : "btn-outline-secondary"
+                                        ? "btn-add"
+                                        : "btn-edit"
                                 } mr-2`}
                                 onClick={() => setCurrentPage(page)}
                             >
@@ -133,7 +133,7 @@ function Users() {
                     )}
                     {currentPage < lastPage && (
                         <button
-                            className="btn btn-outline-secondary"
+                            className="btn-add"
                             onClick={handleNextClick}
                         >
                             Next

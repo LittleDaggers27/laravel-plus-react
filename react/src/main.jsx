@@ -4,8 +4,8 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./router.jsx";
 import { ContextProvider } from "./contexts/ContextProvider.jsx";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.js'
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/js/bootstrap.js'
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
