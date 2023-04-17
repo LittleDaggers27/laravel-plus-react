@@ -10,7 +10,7 @@ function Signup() {
     const passwordConfirmationRef = useRef();
 
     const { setUser, setToken } = useStateContext();
-    const [errorMessages, setErrorMessages] = useState([]);
+    const [errors, setErrors] = useState(null);
 
     const onSubmit = (ev) => {
         ev.preventDefault();
@@ -29,16 +29,20 @@ function Signup() {
                 setToken(data.token);
             })
             .catch((error) => {
-                if (
-                    error.response &&
-                    error.response.data &&
-                    error.response.data.errors
-                ) {
-                    const errors = error.response.data.errors;
-                    setErrorMessages(Object.values(errors).flat());
-                } else {
-                    setErrorMessages("An error occurred.");
+                const response = error.response;
+                if (response && response.status === 422) {
+                    setErrors(response.data.errors);
                 }
+                // if (
+                //     error.response &&
+                //     error.response.data &&
+                //     error.response.data.errors
+                // ) {
+                //     const errors = error.response.data.errors;
+                //     setErrorMessages(Object.values(errors).flat());
+                // } else {
+                //     setErrorMessages("An error occurred.");
+                // chatGPT provided code }
             });
     };
     return (
@@ -46,37 +50,30 @@ function Signup() {
             <div className="form">
                 <form onSubmit={onSubmit}>
                     <h1 className="title">Signup for free</h1>
-                    <input
-                        ref={nameRef}
-                        type="text"
-                        placeholder="Full Name"
-                        required
-                    />
+                    {errors && (
+                        <div className="alert">
+                            {Object.keys(errors).map((key) => (
+                                <p key={key}>{errors[key][0]}</p>
+                            ))}
+                        </div>
+                    )}
+                    <input ref={nameRef} type="text" placeholder="Full Name" />
                     <input
                         ref={emailRef}
                         type="email"
                         placeholder="Email Address"
-                        required
                     />
                     <input
                         ref={passwordRef}
                         type="password"
                         placeholder="Password"
-                        required
                     />
                     <input
                         ref={passwordConfirmationRef}
                         type="password"
                         placeholder="Confrim Your Password"
-                        required
                     />
-                    {errorMessages.length > 0 && (
-                        <div className="error">
-                            {errorMessages.map((errorMessage) => (
-                                <div key={errorMessage}>{errorMessage}</div>
-                            ))}
-                        </div>
-                    )}
+
                     <button type="submit" className="btn btn-block">
                         Signup
                     </button>

@@ -33,8 +33,8 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response([
-                'message' => 'Proviced emaild address or Password is incorrect'
-            ]);
+                'message' => 'Provided Email Address or Password is incorrect'
+            ], 422);
         }
 
         $user = Auth::user();
@@ -45,7 +45,7 @@ class AuthController extends Controller
     }
 
 
-    public function logout($request)
+    public function logout(Request $request)
     {
         /** @var User $user */
 
