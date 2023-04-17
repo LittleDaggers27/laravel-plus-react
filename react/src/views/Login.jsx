@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+function Login() {
     const onSubmit = (ev) => {
         ev.preventDefault();
     };
@@ -10,16 +10,27 @@ export default function Login() {
             <div className="form">
                 <form onSubmit={onSubmit}>
                     <h1 className="title"> Login into your account</h1>
-                    <input type="email" placeholder="Enter your Email" />
-                    <input type="password" placeholder="Enter your Password" />
+                    <input
+                        type="email"
+                        placeholder="Enter your Email"
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Enter your Password"
+                        required
+                    />
                     <button type="submit" className="btn btn-block">
                         Login
                     </button>
                     <p className="message">
-                        Not Registered? <Link to="/signup">Create account</Link>
+                        Not Registered?{" "}
+                        <Link to="/signup">Create an account</Link>
                     </p>
                 </form>
             </div>
         </div>
     );
 }
+
+export default Login;
