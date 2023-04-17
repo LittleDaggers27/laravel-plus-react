@@ -28,7 +28,7 @@ function DefaultLayout() {
     return (
         <div id="defaultLayout">
             <aside>
-                <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard" > <i className="fa-solid fa-chart-line" ></i> &nbsp; Dashboard</Link>
                 <Link to="/users">Users</Link>
             </aside>
             <div className="content">
