@@ -92,11 +92,11 @@ input:focus {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.btn:hover,
+/* .btn:hover,
 .btn:active,
 .btn:focus {
     background: #5b08a7;
-}
+} */
 
 .text-center {
     text-align: center;

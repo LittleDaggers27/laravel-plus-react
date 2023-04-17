@@ -5,10 +5,12 @@ import { Link } from "react-router-dom";
 function Users() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
 
     useEffect(() => {
         getUsers();
-    }, []);
+    }, [currentPage]);
 
     const onDelete = (u) => {
         if (!window.confirm("Are you sure you want to delete this user?")) {
@@ -24,15 +26,23 @@ function Users() {
     const getUsers = () => {
         setLoading(true);
         axiosClient
-            .get("/users")
+            .get(`/users?page=${currentPage}`)
             .then(({ data }) => {
                 setLoading(false);
                 setUsers(data.data);
-                console.log(data);
+                setLastPage(data.meta.last_page);
             })
             .catch(() => {
                 setLoading(false);
             });
+    };
+
+    const handlePrevClick = () => {
+        setCurrentPage((prevPage) => prevPage - 1);
+    };
+
+    const handleNextClick = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
     };
 
     return (
@@ -45,7 +55,7 @@ function Users() {
                 }}
             >
                 <h1>Users</h1>
-                <Link to="/users/new" className="btn-add">
+                <Link to="/users/new" className="btn btn-primary">
                     Add New
                 </Link>
             </div>
@@ -79,7 +89,7 @@ function Users() {
                                     <td>{u.created_at}</td>
                                     <td>
                                         <Link
-                                            className="btn-edit"
+                                            className="btn btn-success"
                                             to={`/users/${u.id}/edit`}
                                         >
                                             Edit
@@ -87,7 +97,7 @@ function Users() {
                                         &nbsp;
                                         <button
                                             onClick={(ev) => onDelete(u)}
-                                            className=" btn-delete"
+                                            className="btn btn-danger"
                                         >
                                             Delete
                                         </button>
@@ -97,6 +107,39 @@ function Users() {
                         </tbody>
                     )}
                 </table>
+                <div className="pagination">
+                    {currentPage > 1 && (
+                        <button
+                            className="btn btn-outline-secondary mr-2"
+                            onClick={handlePrevClick}
+                        >
+                            Previous
+                        </button>
+                    )}
+                    {Array.from({ length: lastPage }, (_, i) => i + 1).map(
+                        (page) => (
+                            <button
+                                key={page}
+                                className={`btn ${
+                                    currentPage === page
+                                        ? "btn-primary"
+                                        : "btn-outline-secondary"
+                                } mr-2`}
+                                onClick={() => setCurrentPage(page)}
+                            >
+                                {page}
+                            </button>
+                        )
+                    )}
+                    {currentPage < lastPage && (
+                        <button
+                            className="btn btn-outline-secondary"
+                            onClick={handleNextClick}
+                        >
+                            Next
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
