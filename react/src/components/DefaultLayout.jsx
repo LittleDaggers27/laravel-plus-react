@@ -4,7 +4,8 @@ import { useStateContext } from "../contexts/ContextProvider.jsx";
 import axiosClient from "../axios-client.js";
 
 function DefaultLayout() {
-    const { user, token, setUser, setToken } = useStateContext();
+    const { user, token, setUser, setToken, notification } =
+        useStateContext();
 
     if (!token) {
         return <Navigate to="/login" />;
@@ -28,8 +29,13 @@ function DefaultLayout() {
     return (
         <div id="defaultLayout">
             <aside>
-              <Link to="/dashboard" > <i className="fa-solid fa-chart-line" ></i> &nbsp; Dashboard</Link>
-                <Link to="/users">Users</Link>
+                <Link to="/dashboard">
+                    {" "}
+                    <i className="fa-solid fa-chart-line"></i> &nbsp; Dashboard
+                </Link>
+                <Link to="/users">
+                    <i className="fa-solid fa-users"></i>&nbsp; Users
+                </Link>
             </aside>
             <div className="content">
                 <header>
@@ -45,6 +51,7 @@ function DefaultLayout() {
                     <Outlet />
                 </main>
             </div>
+            {notification && <div className="notification">{notification}</div>}
         </div>
     );
 }

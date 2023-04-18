@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use Exception;
+use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Resources\UserResource;
-use App\Models\User;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         return UserResource::collection(
-            User::query()->orderBy('id', 'desc')->paginate()
+            User::query()->orderBy('id', 'desc')->paginate(10)
         );
     }
 
@@ -25,12 +26,17 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $data = $request->validated();
-        $data['password'] = bcrypt($data['password']);
+        try {
 
-        $user = User::create($data);
+            $data = $request->validated();
+            $data['password'] = bcrypt($data['password']);
 
-        return response(new UserResource($user), 201);
+            $user = User::create($data);
+
+            return response(new UserResource($user), 201);
+        } catch (Exception $exception) {
+            abort(500, 'Could not add user');
+        }
     }
 
     /**

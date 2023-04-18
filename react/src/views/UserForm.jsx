@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../axios-client.js";
 import { useNavigate, useParams } from "react-router-dom";
+import { useStateContext } from "../contexts/ContextProvider.jsx";
 
 function UserForm() {
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState(null);
     const navigate = useNavigate();
-
+    const { setNotification } = useStateContext();
     const [user, setUser] = useState({
         id: null,
         name: "",
@@ -36,11 +37,28 @@ function UserForm() {
             axiosClient
                 .put(`/users/${user.id}`, user)
                 .then(() => {
+                    setNotification("User was successfully updated");
                     navigate("/users");
                 })
                 .catch((error) => {
-                    const response = error.resonse;
+                    const response = error.response;
                     if (response && response.status === 422) {
+                        setErrors(response.data.errors);
+                    } else if (response && response.status === 500) {
+                        setErrors(response.data.message);
+                    }
+                });
+        } else {
+            axiosClient
+                .post(`/users`, user)
+                .then(() => {
+                    setNotification("User was successfully created");
+                    navigate("/users");
+                })
+                .catch((error) => {
+                    const response = error.response;
+                    if (response && response.status === 422) {
+                        console.log(response);
                         setErrors(response.data.errors);
                     }
                 });
@@ -105,7 +123,7 @@ function UserForm() {
                                 })
                             }
                             type="password"
-                            name="confirm_password"
+                            name="password_confirmation"
                             placeholder="Password Confirmation"
                         />
                         <button className="btn btn-primary">Save</button>
